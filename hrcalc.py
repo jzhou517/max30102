@@ -114,6 +114,7 @@ def calc_hr_and_spo2(ir_data, red_data):
 
     # why 184?
     # print("ratio average: ", ratio_ave)
+   
     if ratio_ave > 2 and ratio_ave < 184:
         # -45.060 * ratioAverage * ratioAverage / 10000 + 30.354 * ratioAverage / 100 + 94.845
         spo2 = -45.060 * (ratio_ave**2) / 10000.0 + 30.054 * ratio_ave / 100.0 + 94.845
@@ -130,6 +131,14 @@ def find_peaks(x, size, min_height, min_dist, max_num):
     Find at most MAX_NUM peaks above MIN_HEIGHT separated by at least MIN_DISTANCE
     """
     ir_valley_locs, n_peaks = find_peaks_above_min_height(x, size, min_height, max_num)
+    peak_locs = ir_valley_locs[:n_peaks]
+    peak_intervals = np.diff(peak_locs)
+
+    print(
+        f"peaks={n_peaks}, "
+        f"locs={peak_locs}, "
+        f"intervals={peak_intervals.tolist()}"
+    )
     ir_valley_locs, n_peaks = remove_close_peaks(n_peaks, ir_valley_locs, x, min_dist)
 
     n_peaks = min([n_peaks, max_num])
@@ -169,7 +178,7 @@ def remove_close_peaks(n_peaks, ir_valley_locs, x, min_dist):
     """
     Remove peaks separated by less than MIN_DISTANCE
     """
-
+    print(f"remove_close_peaks: min_dist={min_dist}, before={ir_valley_locs}")
     # should be equal to maxim_sort_indices_descend
     # order peaks from large to small
     # should ignore index:0
@@ -195,4 +204,7 @@ def remove_close_peaks(n_peaks, ir_valley_locs, x, min_dist):
 
     sorted_indices[:n_peaks] = sorted(sorted_indices[:n_peaks])
 
+    print(
+    f"remove_close_peaks: after={sorted_indices[:n_peaks]}"
+    )
     return sorted_indices, n_peaks
