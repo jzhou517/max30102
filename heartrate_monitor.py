@@ -26,6 +26,9 @@ class HeartRateMonitor(object):
         red_data = []
         bpms = []
 
+        total_samples = 0
+        last_calc_sample = None
+
         # run until told to stop
         while not self._thread.stopped:
             # check if any data is available
@@ -37,6 +40,7 @@ class HeartRateMonitor(object):
                     num_bytes -= 1
                     ir_data.append(ir)
                     red_data.append(red)
+                    total_samples += 1
                     if self.print_raw:
                         print("{0}, {1}".format(ir, red))
 
@@ -44,8 +48,17 @@ class HeartRateMonitor(object):
                     ir_data.pop(0)
                     red_data.pop(0)
 
-                if len(ir_data) == 100:
-                    bpm, valid_bpm, spo2, valid_spo2 = hrcalc.calc_hr_and_spo2(ir_data, red_data)
+                buffer_full = len(ir_data) == 100
+                calc_due = (
+                    last_calc_sample is None
+                    or total_samples - last_calc_sample >= 25
+                )
+
+                if buffer_full and calc_due:
+                    bpm, valid_bpm, spo2, valid_spo2 = hrcalc.calc_hr_and_spo2(
+                        ir_data, red_data
+                    )
+                    last_calc_sample = total_samples
                     if valid_bpm:
                         bpms.append(bpm)
                         while len(bpms) > 4:
