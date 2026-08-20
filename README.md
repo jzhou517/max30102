@@ -1,6 +1,11 @@
 # max30102
 MAX30102 Pulse Oximetry Sensor code for Raspberry Pi
 
+## Background 2026 
+This is a fork of the max30102 library by doug-burrell used for my personal HR monitor project. The project will be a module on my existing raspberry pi cyberdeck. This is a personal, non-clinical engineering project and is not intended for medical diagnosis or monitoring. 
+
+# Upstream Readme
+
 ## Info
 The code originally comes from: https://github.com/vrano714/max30102-tutorial-raspberrypi
 but with some modifications so that it doesn't require the interrupt pin and
