@@ -1,6 +1,14 @@
-08/19: Common failure mode around peak height averages - one outlier leads to fluctuations in BPM calculations. Don't want to hard code cutoff. Second peak might be diastolic
+08/19: Common failure mode around peak interval averaging; one outlier leads to fluctuations in BPM calculations. Don't want to hard code cutoff. Second peak might be diastolic
 Knowns 
 Sampling rate ~25 hz
+Failure mode:
+Incorrect peak detection causes large BPM fluctuations because all detected
+peak-to-peak intervals are averaged together. Avoid hard-coded BPM cutoffs.
+
+Possible secondary peaks may correspond to diastolic PPG features.
+
+Knowns
+Effective sampling rate is ~25 Hz
 remove_close_peaks() works
 Raw optical signal likely contains a pulse
 Linear detrending helps variation a little
