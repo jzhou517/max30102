@@ -25,16 +25,19 @@ def calc_hr_and_spo2(ir_data, red_data):
     x = -1 * (np.array(ir_data) - ir_mean)
 
     # 4 point moving average
-    # x is np.array with int values, so automatically casted to int
-    for i in range(x.shape[0] - MA_SIZE):
-        x[i] = np.sum(x[i:i+MA_SIZE]) / MA_SIZE
+    filtered_size = x.shape[0] - MA_SIZE + 1
+    for i in range(filtered_size):
+        x[i] = np.sum(x[i:i + MA_SIZE]) / MA_SIZE
 
     # calculate threshold
-    n_th = int(np.mean(x))
+    # only use samples that actually received moving average filter
+    n_th = int(np.mean(x[:filtered_size]))
     n_th = 30 if n_th < 30 else n_th  # min allowed
     n_th = 60 if n_th > 60 else n_th  # max allowed
 
-    ir_valley_locs, n_peaks = find_peaks(x, BUFFER_SIZE, n_th, 4, 15)
+    ir_valley_locs, n_peaks = find_peaks(
+        x, filtered_size, n_th, 4, 15
+    )
     # print(ir_valley_locs[:n_peaks], ",", end="")
     peak_interval_sum = 0
     if n_peaks >= 2:
