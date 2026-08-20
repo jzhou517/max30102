@@ -1,0 +1,11 @@
+08/19: Common failure mode around peak height averages - one outlier leads to fluctuations in BPM calculations. Don't want to hard code cutoff. Second peak might be diastolic
+Knowns 
+Sampling rate ~25 hz
+remove_close_peaks() works
+Raw optical signal likely contains a pulse
+Linear detrending helps variation a little
+Algorithm sometimes finds genuine cardiac spacing
+Also detects secondary waveform features ~every 5-7 samples
+Sometimes misses entire beats (user error?)
+Absolute 30-unit threshold isn't adapting to signal amplitude
+SpO2 inherits peak segmentation flaws so outputs incoherent numbers.
