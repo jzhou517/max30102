@@ -18,12 +18,16 @@ def calc_hr_and_spo2(ir_data, red_data):
     of red/infra-red signal, the an_ratio for the SPO2 is computed.
     """
     # get dc mean
-    ir_mean = int(np.mean(ir_data))
+    ir_array = np.asarray(ir_data, dtype=float)
+    sample_indices = np.arange(len(ir_array))
 
-    # remove DC mean and inver signal
-    # this lets peak detecter detect valley
-    x = -1 * (np.array(ir_data) - ir_mean)
+    baseline = np.polyval(
+        np.polyfit(sample_indices, ir_array, 1),
+        sample_indices
+    )
 
+    x = -(ir_array - baseline)
+    
     # 4 point moving average
     filtered_size = x.shape[0] - MA_SIZE + 1
     for i in range(filtered_size):
@@ -131,15 +135,8 @@ def find_peaks(x, size, min_height, min_dist, max_num):
     Find at most MAX_NUM peaks above MIN_HEIGHT separated by at least MIN_DISTANCE
     """
     ir_valley_locs, n_peaks = find_peaks_above_min_height(x, size, min_height, max_num)
-    peak_locs = ir_valley_locs[:n_peaks]
-    peak_intervals = np.diff(peak_locs)
-
-    print(
-        f"peaks={n_peaks}, "
-        f"locs={peak_locs}, "
-        f"intervals={peak_intervals.tolist()}"
-    )
     ir_valley_locs, n_peaks = remove_close_peaks(n_peaks, ir_valley_locs, x, min_dist)
+    
 
     n_peaks = min([n_peaks, max_num])
 
@@ -178,7 +175,6 @@ def remove_close_peaks(n_peaks, ir_valley_locs, x, min_dist):
     """
     Remove peaks separated by less than MIN_DISTANCE
     """
-    print(f"remove_close_peaks: min_dist={min_dist}, before={ir_valley_locs}")
     # should be equal to maxim_sort_indices_descend
     # order peaks from large to small
     # should ignore index:0
@@ -204,7 +200,4 @@ def remove_close_peaks(n_peaks, ir_valley_locs, x, min_dist):
 
     sorted_indices[:n_peaks] = sorted(sorted_indices[:n_peaks])
 
-    print(
-    f"remove_close_peaks: after={sorted_indices[:n_peaks]}"
-    )
     return sorted_indices, n_peaks
