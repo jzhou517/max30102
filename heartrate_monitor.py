@@ -12,7 +12,9 @@ class HeartRateMonitor(object):
     """
 
     LOOP_TIME = 0.01
-
+    FINGER_THRESHOLD = 50000
+    FINGER_LOSS_SAMPLES = 5
+    
     def __init__(self, print_raw=False, print_result=False):
         self.bpm = 0
         if print_raw is True:
@@ -28,6 +30,7 @@ class HeartRateMonitor(object):
 
         total_samples = 0
         last_calc_sample = None
+        no_finger_samples = 0
 
         # run until told to stop
         while not self._thread.stopped:
@@ -59,15 +62,29 @@ class HeartRateMonitor(object):
                         ir_data, red_data
                     )
                     last_calc_sample = total_samples
-                    if valid_bpm:
+                    finger_detected = not (
+                        np.mean(ir_data) < 50000
+                        and np.mean(red_data) < 50000
+                    )
+
+                    if not finger_detected:
+                        self.bpm = 0
+                        bpms.clear()
+                        ir_data.clear()
+                        red_data.clear()
+                        last_calc_sample = None
+
+                        if self.print_result:
+                            print("Finger not detected")
+
+                    elif valid_bpm:
                         bpms.append(bpm)
+
                         while len(bpms) > 4:
                             bpms.pop(0)
+
                         self.bpm = np.mean(bpms)
-                        if (np.mean(ir_data) < 50000 and np.mean(red_data) < 50000):
-                            self.bpm = 0
-                            if self.print_result:
-                                print("Finger not detected")
+
                         if self.print_result:
                             print("BPM: {0}, SpO2: {1}".format(self.bpm, spo2))
 
