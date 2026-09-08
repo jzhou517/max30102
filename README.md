@@ -5,6 +5,12 @@ A personal project combining a MAX30102 sensor, Raspberry Pi 4, touchscreen, and
 ## Background 2026 
 This is a fork of the max30102 library by doug-burrell used for my personal HR monitor project. The project will be a module on my existing raspberry pi cyberdeck. This is a personal, non-clinical engineering project and is not intended for medical diagnosis or monitoring. 
 
+## Wiring diagram
+
+Earlier wiring configuration. This diagram does not include the updated buck-converter power supply and needs revision.
+
+![Wiring diagram](jpg/max30102-wiring-diagram.png)
+
 ## Breadboard setup
 
 Initial sensor and buzzer connections for testing with the Raspberry Pi.
@@ -28,12 +34,6 @@ Sensor, display, and supporting hardware brought together in the prototype enclo
 Buck converter used in the updated battery-powered setup.
 
 ![Buck converter](jpg/buck-converter-detail.jpg)
-
-## Wiring diagram
-
-Earlier wiring configuration. This diagram does not include the updated buck-converter power supply and needs revision.
-
-![Wiring diagram](jpg/max30102-wiring-diagram.png)
 
 ## Development notes
 
