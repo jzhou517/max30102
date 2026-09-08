@@ -1,9 +1,45 @@
-# max30102
-MAX30102 Pulse Oximetry Sensor code for Raspberry Pi
+# MAX30102 Raspberry Pi Prototype
+
+A personal project combining a MAX30102 sensor, Raspberry Pi 4, touchscreen, and buzzer. These photos show the build from breadboard testing through enclosure and power-supply changes.
 
 ## Background 2026 
 This is a fork of the max30102 library by doug-burrell used for my personal HR monitor project. The project will be a module on my existing raspberry pi cyberdeck. This is a personal, non-clinical engineering project and is not intended for medical diagnosis or monitoring. 
 
+## Breadboard setup
+
+Initial sensor and buzzer connections for testing with the Raspberry Pi.
+
+![Sensor breadboard setup](jpg/sensor-breadboard-setup.jpg)
+
+## Early signal testing
+
+Early testing of the sensor output during prototype development.
+
+![Early signal test](jpg/early-signal-test.jpg)
+
+## Enclosure prototype
+
+Sensor, display, and supporting hardware brought together in the prototype enclosure.
+
+![Integrated enclosure prototype](jpg/integrated-enclosure-prototype.jpg)
+
+## Power supply
+
+Buck converter used in the updated battery-powered setup.
+
+![Buck converter](jpg/buck-converter-detail.jpg)
+
+## Wiring diagram
+
+Earlier wiring configuration. This diagram does not include the updated buck-converter power supply and needs revision.
+
+![Wiring diagram](jpg/max30102-wiring-diagram.png)
+
+## Development notes
+
+See [progress-updates.txt](progress-updates.txt) for working notes.
+
+Experimental prototype; not a clinically validated medical device.
 # Upstream Readme
 
 ## Info
